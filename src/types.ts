@@ -1,5 +1,3 @@
-// TODO: clean up these types
-
 export interface LogEntry {
   requestId: string;
   path: string;
@@ -9,18 +7,18 @@ export interface LogEntry {
   level: string;
   ok: boolean;
   timestamp: string;
-  input?: any;
-  result?: any;
+  input?: unknown;
+  result?: unknown;
   error?: string;
   slow?: boolean;
 }
 
-// TODO: make this more specific
-export type LogFn = (entry: any) => void;
+export type LogFn = (entry: LogEntry) => void;
 
 export interface LogMiddlewareOptions {
-  logger?: any;
+  logger?: LogFn;
   level?: string;
   logInput?: boolean;
   logResult?: boolean;
+  formatEntry?: (raw: Omit<LogEntry, 'timestamp' | 'durationMs'>) => LogEntry;
 }
