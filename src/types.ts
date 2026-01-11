@@ -15,10 +15,18 @@ export interface LogEntry {
 
 export type LogFn = (entry: LogEntry) => void;
 
+export interface LoggerLike {
+  info: (entry: LogEntry) => void;
+  warn?: (entry: LogEntry) => void;
+  error?: (entry: LogEntry) => void;
+  [key: string]: ((entry: LogEntry) => void) | undefined;
+}
+
 export interface LogMiddlewareOptions {
-  logger?: LogFn;
+  logger?: LogFn | LoggerLike;
   level?: string;
   logInput?: boolean;
   logResult?: boolean;
+  slowThreshold?: number;
   formatEntry?: (raw: Omit<LogEntry, 'timestamp' | 'durationMs'>) => LogEntry;
 }
