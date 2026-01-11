@@ -24,21 +24,33 @@ export function createLogMiddleware(opts: LogMiddlewareOptions = {}) {
     const start = performance.now();
     const requestId = generateRequestId();
 
-    console.log(`[trpc-log] ${type} ${path}`); // TODO: remove
+    try {
+      const result = await next();
+      const duration = performance.now() - start;
+      const slow = slowThreshold ? duration > slowThreshold : false;
 
-    const result = await next();
-    const duration = performance.now() - start;
-    const slow = slowThreshold ? duration > slowThreshold : false;
+      log(formatEntry({
+        requestId, path, type, duration,
+        level: slow ? 'warn' : level,
+        ok: result.ok,
+        input: logInput ? rawInput : undefined,
+        result: logResult && result.ok ? result.data : undefined,
+        slow,
+      }));
 
-    log(formatEntry({
-      requestId, path, type, duration,
-      level: slow ? 'warn' : level,
-      ok: result.ok,
-      input: logInput ? rawInput : undefined,
-      result: logResult && result.ok ? result.data : undefined,
-      slow,
-    }));
+      return result;
+    } catch (error) {
+      const duration = performance.now() - start;
 
-    return result;
+      log(formatEntry({
+        requestId, path, type, duration,
+        level: 'error',
+        ok: false,
+        input: logInput ? rawInput : undefined,
+        error: error instanceof Error ? error.message : String(error),
+      }));
+
+      throw error;
+    }
   };
 }
