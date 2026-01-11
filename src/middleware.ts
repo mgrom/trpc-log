@@ -1,43 +1,35 @@
 import type { LogEntry, LogFn, LogMiddlewareOptions } from './types';
+import { generateRequestId } from './utils';
+import { formatLogEntry } from './formatter';
 
-let counter = 0;
-
-export function logRequest(opts: LogMiddlewareOptions = {}) {
+export function createLogMiddleware(opts: LogMiddlewareOptions = {}) {
   const {
     logger = console.log,
     level = 'info',
     logInput = false,
     logResult = false,
+    formatEntry = formatLogEntry,
   } = opts;
 
   const log: LogFn = typeof logger === 'function' ? logger : console.log;
 
   return async (params: any) => {
     const { path, type, next, rawInput } = params;
-    const start = Date.now();
-    const requestId = `req-${counter++}`;
+    const start = performance.now();
+    const requestId = generateRequestId();
 
-    console.log(`[trpc-log] starting ${type} ${path}`); // TODO: remove
+    console.log(`[trpc-log] ${type} ${path}`); // TODO: remove debug
 
     const result = await next();
-    const duration = Date.now() - start;
+    const duration = performance.now() - start;
 
-    console.log(`[trpc-log] finished ${type} ${path} in ${duration}ms`); // TODO: remove
-
-    const entry: LogEntry = {
-      requestId,
-      path,
-      type,
-      duration,
-      durationMs: `${Math.round(duration)}ms`,
-      level,
+    log(formatEntry({
+      requestId, path, type, duration, level,
       ok: result.ok,
-      timestamp: new Date().toISOString(),
       input: logInput ? rawInput : undefined,
       result: logResult && result.ok ? result.data : undefined,
-    };
+    }));
 
-    log(entry);
     return result;
   };
 }

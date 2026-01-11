@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { logRequest } from '../src/middleware';
+import { createLogMiddleware } from '../src/middleware';
 
 function createMockParams(overrides = {}) {
   return {
@@ -11,10 +11,10 @@ function createMockParams(overrides = {}) {
   };
 }
 
-describe('logRequest', () => {
+describe('createLogMiddleware', () => {
   it('should call next and return result', async () => {
     const logger = vi.fn();
-    const middleware = logRequest({ logger });
+    const middleware = createLogMiddleware({ logger });
     const params = createMockParams();
 
     const result = await middleware(params);
@@ -25,7 +25,7 @@ describe('logRequest', () => {
 
   it('should log an entry with path and type', async () => {
     const logger = vi.fn();
-    const middleware = logRequest({ logger });
+    const middleware = createLogMiddleware({ logger });
 
     await middleware(createMockParams());
 
@@ -37,7 +37,7 @@ describe('logRequest', () => {
 
   it('should include input when logInput is true', async () => {
     const logger = vi.fn();
-    const middleware = logRequest({ logger, logInput: true });
+    const middleware = createLogMiddleware({ logger, logInput: true });
 
     await middleware(createMockParams());
 
