@@ -1,5 +1,5 @@
 import type { LogEntry, LogFn, LogMiddlewareOptions, LoggerLike } from './types';
-import { generateRequestId } from './utils';
+import { formatDuration, generateRequestId } from './utils';
 import { formatLogEntry } from './formatter';
 
 export function createLogMiddleware(opts: LogMiddlewareOptions = {}) {

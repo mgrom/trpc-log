@@ -1,6 +1,6 @@
 {
   "name": "trpc-log",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Lightweight request logging middleware for tRPC v11",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
