@@ -1,16 +1,41 @@
 {
   "name": "trpc-log",
   "version": "0.0.1",
-  "description": "Logging middleware for tRPC",
+  "description": "Lightweight request logging middleware for tRPC v11",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "test": "vitest run"
   },
+  "keywords": [
+    "trpc",
+    "logging",
+    "middleware",
+    "trpc-middleware",
+    "request-logging"
+  ],
+  "author": "mgrom",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgrom/trpc-log"
+  },
   "devDependencies": {
     "tsup": "^8.0.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "vitest": "^2.0.0"
   }
 }
