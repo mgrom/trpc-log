@@ -29,4 +29,5 @@ export interface LogMiddlewareOptions {
   logResult?: boolean;
   slowThreshold?: number;
   formatEntry?: (raw: Omit<LogEntry, 'timestamp' | 'durationMs'>) => LogEntry;
+  onError?: (error: unknown, entry: LogEntry) => void;
 }

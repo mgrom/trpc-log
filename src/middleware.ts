@@ -10,6 +10,7 @@ export function createLogMiddleware(opts: LogMiddlewareOptions = {}) {
     logResult = false,
     slowThreshold,
     formatEntry = formatLogEntry,
+    onError,
   } = opts;
 
   const log: LogFn = typeof logger === 'function'
@@ -42,14 +43,16 @@ export function createLogMiddleware(opts: LogMiddlewareOptions = {}) {
     } catch (error) {
       const duration = performance.now() - start;
 
-      log(formatEntry({
+      const entry = formatEntry({
         requestId, path, type, duration,
         level: 'error',
         ok: false,
         input: logInput ? rawInput : undefined,
         error: error instanceof Error ? error.message : String(error),
-      }));
+      });
 
+      log(entry);
+      if (onError) onError(error, entry);
       throw error;
     }
   };
