@@ -16,7 +16,7 @@ import { createLogMiddleware } from 'trpc-log';
 
 const t = initTRPC.create();
 
-// basic — logs to console
+// basic - logs to console
 const logged = t.procedure.use(createLogMiddleware());
 
 // with options
@@ -42,9 +42,9 @@ const logged = t.procedure.use(createLogMiddleware({
 | `level` | `string` | `'info'` | Default log level |
 | `logInput` | `boolean` | `false` | Include procedure input |
 | `logResult` | `boolean` | `false` | Include result data |
-| `slowThreshold` | `number` | — | ms threshold for slow warnings |
-| `onError` | `function` | — | Error callback |
-| `formatEntry` | `function` | — | Custom formatter |
+| `slowThreshold` | `number` | - | ms threshold for slow warnings |
+| `onError` | `function` | - | Error callback |
+| `formatEntry` | `function` | - | Custom formatter |
 
 ## Log Entry
 
